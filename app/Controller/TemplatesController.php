@@ -14,8 +14,6 @@ class TemplatesController extends AppController {
 		$this->autoRender = false;
 		
 		$template = $this->Template->findByName($_REQUEST['tpl']);
-		//var_dump($template);
-		
 		//path 
 		if($this->Auth->user('id')){
 			$rootPath = APP.WEBROOT_DIR.DS.'tex'.DS.'users'.DS.$this->Auth->user('id').DS;
@@ -34,10 +32,16 @@ class TemplatesController extends AppController {
 			$rootPath = APP.WEBROOT_DIR.DS.'tex'.DS.'anonymous'.DS;
 			$aid = $this->getHash($rootPath);
 			$this->Session->write('User.aid', $aid);
+			
+			if(!file_exists($rootPath.$aid))
+				mkdir($rootPath.$aid);
+				
+			// copy file
+			$src = APP.WEBROOT_DIR.DS.'tpl'.DS.$template['Template']['id'];
+			$dst = $rootPath.$aid;
+			$this->recurse_copy($src,$dst);
+			$this->redirect('/'.$aid);
 		}
-		
-		die;
-		
 	}
 	
 	public function getHash($rootPath){

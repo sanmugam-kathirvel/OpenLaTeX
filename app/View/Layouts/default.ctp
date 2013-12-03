@@ -29,7 +29,7 @@
 	<?php
 		//echo $this->Html->meta('icon');
 		echo $this->fetch('meta');
-		echo $this->Html->css(array('bootstrap', 'codemirror', 'docs','latex'));
+		echo $this->Html->css(array('bootstrap', 'codemirror', 'latex'));
 		echo $this->Html->script(array('jquery-1.9.1', 'bootstrap', 'codemirror', 'stex','latex','jquery.md5', 'jquery.base64'));
 	?>
 
@@ -113,7 +113,7 @@
 			</nav>
 		</div>
 		<div style="height:50px;"></div>
-		<?php if ($this->request->here == '/latex/'): ?>
+		<?php if ($this->request->params['action'] == 'home'): ?>
 			<div id="content" class="bs-header">
 			  <div class="container">
 				<h1>Instructions</h1>

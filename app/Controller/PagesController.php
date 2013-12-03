@@ -185,9 +185,9 @@ class PagesController extends AppController {
 			fclose($handle);
 		
 			if($this->Auth->user('id') && file_exists($rootPath.'main.pdf'))
-				$pdfpath = FULL_BASE_URL.DS.'latex/tex'.DS.'users'.DS.$this->Auth->user('id').DS.$sessionId.DS.'main.pdf';
+				$pdfpath = FULL_BASE_URL.DS.$this->request->base.DS.'tex'.DS.'users'.DS.$this->Auth->user('id').DS.$sessionId.DS.'main.pdf';
 			if(!$this->Auth->user('id') && file_exists($rootPath.'main.pdf'))
-				$pdfpath = FULL_BASE_URL.DS.'latex/tex'.DS.'anonymous'.DS.$sessionId.DS.'main.pdf';
+				$pdfpath = FULL_BASE_URL.$this->request->base.DS.'tex'.DS.'anonymous'.DS.$sessionId.DS.'main.pdf';
 			$this->set('filedata', array('data' => $data, 'filename' => $fileName, 'pdfpath' => $pdfpath));
 		}else{
 			$this->Session->delete('User');

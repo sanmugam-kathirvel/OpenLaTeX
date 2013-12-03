@@ -43,7 +43,7 @@ class AppController extends Controller {
     );
 
     public function beforeFilter() {
-        $this->Auth->allow('anoysdashboard', 'home', 'index', 'view', 'compile', 'resources', 'resourcesList', 'addFile', 'autoSave');
+        $this->Auth->allow('anoysdashboard', 'home', 'index', 'view', 'compile', 'resources', 'resourcesList', 'addFile', 'autoSave', 'templates', 'usetemplate');
     }
 	public function isAuthorized($user) {
 	    // Admin can access every action
