@@ -1,6 +1,6 @@
 $(document).ready(function() {
 	/* fix window height and width */
-	var webroot = 'http://'+location.hostname+'/latex/'
+	var webroot = 'http://'+location.hostname+'/OpenLaTeX/'
 	var editor = CodeMirror.fromTextArea(document.getElementById("code"), {mode: "text/x-latex", lineNumbers: true, lineWrapping: true,});
 	// compile the code
 
@@ -68,7 +68,7 @@ $(document).ready(function() {
 						},
 						success : function(data){
 							output = data;
-							output = JSON.parse(data);
+							//output = JSON.parse(data);
 							console.log(output);
 							if(output.status){
 								updateFileList();

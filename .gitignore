@@ -15,6 +15,9 @@ app/[Cc]onfig/database.php
 /tags
 
 *~
+app/webroot/tpl/*
+!app/webroot/tpl/empty
+
 app/webroot/tex/*/*
 app/webroot/tex/users/*
 !app/webroot/tex/users/empty

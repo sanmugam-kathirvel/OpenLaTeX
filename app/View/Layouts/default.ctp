@@ -53,17 +53,21 @@
 				<ul class="nav navbar-nav">
 				  <?php if($this->Session->read('Auth.User.id')): ?>
 				  	 <li><?php echo $this->Html->link('Dashboard', '/dash'); ?></li>
-				  	 <?php if(isset($files)): ?>
-							 <li class="dropdown">
-								<a href="#" class="dropdown-toggle" data-toggle="dropdown">Project <b class="caret"></b></a>
-								<ul class="dropdown-menu">
-									<?php foreach($files as $file): ?>
-										<li><a href="#"><?php  echo $file; ?> </a></li>
-									<?php endforeach; ?>
-								</ul>
-							</li>
-						<?php endif; ?>
 				  <?php endif; ?>
+				  <?php if(isset($files)): ?>
+						 <li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">Project <b class="caret"></b></a>
+							<ul class="dropdown-menu">
+								<li><div class='add-file'>
+									<span>add</span>
+								</div></li>
+								<?php foreach($files as $file): ?>
+									<?php //var_dump($files); ?>
+									<li><?php echo $file['filename']." ". ($file['can_edit'] ? ($this->Html->link('Edit', '?fn='.base64_encode($file['filename']), array('class' => 'link'))) : ''); ?></li>	
+								<?php endforeach; ?>
+							</ul>
+						</li>
+					<?php endif; ?>
 				  <li><?php echo $this->Html->link('Templates', '/templates'); ?></li>
 				</ul>
 				<?php if(isset($output) && isset($output['errors'])): ?>

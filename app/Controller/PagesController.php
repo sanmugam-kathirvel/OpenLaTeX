@@ -146,37 +146,51 @@ class PagesController extends AppController {
 		}
 		
 		/* compile end */
-			
+		
+		/* setSessionPath */
 		$this->set('resources', $this->resourcesList());
 		$pathSessionData = $this->setSessionPath();
 		$rootPath = $pathSessionData['rootPath'];
-		//var_dump($rootPath);
 		if($this->Auth->user('id'))
 			$sessionId = $pathSessionData['sessionId']['upid'];
 		else
 			$sessionId = $this->Session->read('User.aid');
 		
 		$this->set('sessionId', $sessionId);
-		$fileName = 'main.tex';
 		
 		/* read the resources */
-		if($this->Auth->user('id')){
+		//if($this->Auth->user('id')){ /* Commended for all */
 			$handle = opendir($rootPath);
-			$file_types = array('image/jpeg', 'text/x-tex', 'image/png');
+			$file_types = array('.tex');
+			$file_names = array('main.pdf', 'main.log');
 			$files = array();
+			$i = 0;
 			while (false !== ($entry = readdir($handle))) {
-				if ($entry != "." && $entry != ".." && in_array(mime_content_type($rootPath.$entry), $file_types)) {
-					$files[] = $entry;
+				if ($entry != "." && $entry != ".." && !in_array($entry, $file_names)) { 
+					$files[$i]['filename'] = $entry;
+					$files[$i]['can_edit'] = false;
+					$file_ext = substr($entry, strripos($entry, '.'));
+					if(in_array($file_ext, $file_types)){
+						$files[$i]['can_edit'] = true;
+					}
+					$i++;
 				}
 			}
 			//var_dump($files);
 			$this->set('files', $files);
-		}
+		//}
 		/* read the resources end */
-		
+
 		$data = '';
 		$pdfpath = '';
 		if(file_exists($rootPath)){
+			/* edit file */
+			if(isset($this->request->query['fn']) && file_exists($rootPath.base64_decode($this->request->query['fn']))){
+				$fileName = base64_decode($this->request->query['fn']);
+			}	else {
+				$fileName = 'main.tex';
+			}
+			/* end edit file */
 			if(!file_exists($rootPath.$fileName))
 				fopen($rootPath.$fileName, 'w');
 			$handle = fopen($rootPath.$fileName, 'r');
