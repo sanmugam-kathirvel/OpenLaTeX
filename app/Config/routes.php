@@ -31,6 +31,7 @@
 	Router::connect('/logout', array('controller' => 'users', 'action' => 'logout'));
 	Router::connect('/dash', array('controller' => 'pages', 'action' => 'dashboard'));
 	Router::connect('/addfile', array('controller' => 'pages', 'action' => 'addFile'));
+	Router::connect('/settitle', array('controller' => 'pages', 'action' => 'setProjectTitle'));
 	Router::connect('/resources', array('controller' => 'pages', 'action' => 'resources'));
 	Router::connect('/resources-list', array('controller' => 'pages', 'action' => 'resourcesList'));
 	Router::connect('/autosave', array('controller' => 'pages', 'action' => 'autoSave'));

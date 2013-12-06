@@ -29,8 +29,13 @@
 	<?php
 		//echo $this->Html->meta('icon');
 		echo $this->fetch('meta');
-		echo $this->Html->css(array('bootstrap', 'codemirror', 'latex'));
-		echo $this->Html->script(array('jquery-1.9.1', 'bootstrap', 'codemirror', 'stex','latex','jquery.md5', 'jquery.base64'));
+		if(isset($this->request->params['controller']) && $this->request->params['controller'] == 'pages' && isset($this->request->params['action']) && $this->request->params['action'] == 'index'){
+			echo $this->Html->css(array('bootstrap', 'codemirror', 'latex'));
+			echo $this->Html->script(array('jquery-1.9.1', 'bootstrap', 'codemirror', 'stex','latex','jquery.md5', 'jquery.base64', 'custom'));
+		}else{
+			echo $this->Html->css(array('bootstrap', 'latex'));
+			echo $this->Html->script(array('jquery-1.9.1', 'bootstrap', 'custom'));
+		}
 	?>
 
 </head>

@@ -4,12 +4,18 @@
 		<p>To Create new Project, <?php echo $this->Html->link('create a new project', '/dash?template=paper', array('class' => 'link')); ?></p>
 		<p>or choose the existing projects.</p>
 		<ul>
-		<?php 
+		<?php
 			$i = 1; 
-			foreach($dirlist as $dir): ?>
-			<li><?php echo $this->Html->link('Project '.$i, '/dash?oldtemplate=open&p='.base64_encode($dir)); ?> | <?php echo $this->Html->link('Delete', '/delete?p='.base64_encode($dir)); ?> </li>
+			foreach($dirlist as $dir):
+				 if($dir['Project']['name'])
+				 	 $projectName = $dir['Project']['name'];
+				 else{
+				 	 $projectName = 'Project '.$i;
+				 	 $i++;
+				 }
+			?>
+			<li><span class='project-title'><?php echo $this->Html->link($projectName, '/dash?oldtemplate=open&p='.base64_encode($dir['Project']['projectid'])); ?></span> |  <?php echo $this->Html->link('Edit', '#', array('class' => 'edit-project-title')); ?> |<?php echo $this->Html->link('Delete', '/delete?p='.base64_encode($dir['Project']['projectid'])); ?><input value="<?php echo $dir['Project']['id']; ?>" type='hidden' class='projectid'> </li>
 		<?php 
-				$i++;
 			endforeach; 
 		?>
 		</ul>

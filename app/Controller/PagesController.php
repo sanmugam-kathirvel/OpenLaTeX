@@ -36,7 +36,7 @@ class PagesController extends AppController {
  *
  * @var array
  */
-	public $uses = array();
+	public $uses = array('User', 'Project');
 
 /**
  * Displays a view
@@ -251,9 +251,8 @@ class PagesController extends AppController {
 	}
 	public function dashboard() {
 		/* create new project */
-		
 		if(isset($this->request->query['template']) && $this->request->query['template'] == 'paper'){
-		
+			
 			$pathSessionData = $this->setSessionPath('userpath');
 			$rootPath = $pathSessionData['rootPath'];
 			/* create user filder */
@@ -269,6 +268,7 @@ class PagesController extends AppController {
 				}
 			}
 			$this->Session->write('User.upid', $upid);
+			
 			/* create user project folder */
 			if(!file_exists($rootPath.$upid))
 				mkdir($rootPath.$upid);
@@ -277,6 +277,8 @@ class PagesController extends AppController {
 				fclose($handle);
 				/* TODO:read default template on to file*/
 			}
+			/* insert into database */
+			$this->Project->save(array('Project' => array('user_id' => $this->Auth->user('id'), 'projectid' => $upid)));
 			return $this->redirect('/'.$upid);
 		}
 		
@@ -289,7 +291,12 @@ class PagesController extends AppController {
 		}
 		
 		/* list all user project */
-		$this->set('dirlist', $this->listDir());
+		if($this->Auth->user('id')){
+			$dirlist = $this->Project->find('all', array('conditions' => array('Project.user_id' => $this->Auth->user('id'))));
+			$this->set('dirlist', $dirlist);
+		} else {
+			$this->set('dirlist', $this->listDir());
+		}
 		
 	}
 	public function autoSave(){
@@ -388,6 +395,11 @@ class PagesController extends AppController {
 		$rootPath = $pathSessionData['rootPath'];
 		if($_REQUEST['p']){
 			$this->rrmdir($rootPath.base64_decode($_REQUEST['p']));
+			/* delete into database */
+			$project = $this->Project->find('first', array('conditions' => array('Project.user_id' => $this->Auth->user('id'), 'Project.projectid' => base64_decode($_REQUEST['p'])),  'fields' => array('Project.id')));
+			if(isset($project['Project']['id']))
+				$this->Project->delete($project['Project']['id']);
+			
 			$this->redirect('/dash');
 		}else{
 			$this->redirect('/dash');
@@ -422,6 +434,22 @@ class PagesController extends AppController {
 		}else{
 			$output['status'] = false; 
 		}
+		echo json_encode($output);
+		exit;
+	}
+	
+	public function setProjectTitle(){
+		
+		$this->Project->read(null, $_POST['projectid']);
+		
+		$this->Project->set(array(
+			'name' => $_POST['title'],
+		));
+		if($this->Project->save())
+			$output['status'] = true;
+		else
+			$output['status'] = false; 
+	
 		echo json_encode($output);
 		exit;
 	}

@@ -3,7 +3,7 @@ App::uses('AppController', 'Controller');
 
 class TemplatesController extends AppController {
 
-	#public $uses = array();
+	public $uses = array('Template', 'Project');
 	
 	public function templates(){
 		$templates = $this->Template->find('all');
@@ -26,6 +26,8 @@ class TemplatesController extends AppController {
 			$src = APP.WEBROOT_DIR.DS.'tpl'.DS.$template['Template']['id'];
 			$dst = $rootPath.$upid;
 			$this->recurse_copy($src,$dst);
+			/* insert into database */
+			$this->Project->save(array('Project' => array('user_id' => $this->Auth->user('id'), 'projectid' => $upid, 'name' => $_REQUEST['tpl'])));
 			$this->redirect('/'.$upid);
 			
 		} else {
